@@ -2,46 +2,66 @@ const express = require('express');
 const router = express.Router();
 const collaboratorsService = require('../service/collaboratorsService');
 
-// router.get('/', (req,res) => {
-//     console.log('requisição pra barra')
-//     res.status(200).json({msg: 'Bem vindo a API'});
-// })
-
 router.get('/collaborators', async (req,res) => {
-    let collaborators = await collaboratorsService.getAll();
-    console.log(collaborators)
-    res.end(collaborators[0].img);
-
+    try{
+        let collaborators = await collaboratorsService.getAll();
+        let collabs = JSON.parse(collaborators)
+        res.send(collabs);
+    }catch(err){
+        res.status(404).send('Erro ao buscar colaboradores');
+    }
 });
 
-router.post('/addcollaborators', async (req,res) => {
-    let nome = req.body.nome;
-    let cargo = req.body.cargo;
-    let { name, data }  = req.files.avatar;
-    console.log(name, data);
+// router.post('/addcollaborators', async (req,res) => {
+//     try{
+//         let nome = req.body.nome;
+//         let cargo = req.body.cargo;
+//         let { name, data }  = req.files?.avatar;
+//         console.log(name, data);
+//         let response = await collaboratorsService.post(nome, cargo, name, data);
+//         res.status(200).send(response);
+//     }catch(err){
+//         res.status(404).send('Erro ao add um novo colaborador');
+//     }
 
+// });
+
+router.post('/addcollaborators', async (req,res) => {
     try{
-        let newCollaborator = await collaboratorsService.post(nome, cargo, name, data);
-        res.status(200).send(newCollaborator);
-    }catch(e){
-        res.status(404).send('Erro ao add um novo colaborador')
+        let nome = req.body.nome;
+        let cargo = req.body.cargo;
+        let avatar = req.body.avatar;
+        let response = await collaboratorsService.post(nome, cargo, avatar);
+        res.status(200).send(response);
+    }catch(err){
+        res.status(404).send('Erro ao add um novo colaborador');
     }
 
 });
 
-
-
-// router.post('/login', async (req,res) => {
-//     let username = req.body.username;
-//     let password = req.body.password;
-//     try{
-//         let user = await usersService.login(username, password);
-//         res.status(200).send(user)
-//     }catch(e){
-//         res.status(404).send('Senha e/ou usuário inválidos')
-//     }
-
+router.delete('/deletecollaborator/:id', async (req,res) => {
+    try{ 
+        let id = req.params.id;      
+        let response = await collaboratorsService.delete(id);
+        res.status(200).send(response);
+    }catch(err){
+        console.log('Erro na rota de deletar colaborador', err);
+        res.status(404).send('Erro ao deletar colaborador');
+    }
     
-// });
+})
+
+router.put('/editcollaborator/:id', async (req, res) => {
+    try{
+        let id = req.params.id
+        let nome = req.body.nome;
+        let cargo = req.body.cargo;
+        let response = await collaboratorsService.put(id, nome, cargo);
+        res.status(200).send(response)
+    }catch(err){
+        console.log('Erro na rota de editar colaborador', err);
+        res.status(404).send('Erro ao editar colaborador');
+    }
+})
 
 module.exports = router;

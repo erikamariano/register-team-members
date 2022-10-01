@@ -1,37 +1,31 @@
 <template>
-  <div id="content">
-  <v-row>
-    <v-col cols="12" sm="8" md="6">
-      <v-card color="#9e9b9b">
-        <v-card-title class="headline">
-          Cadastro
-        </v-card-title>
-        
-        <v-card-text>
-         <v-text-field label="username" outlined filled v-model="username"></v-text-field>
-         <v-text-field label="password" outlined filled name="password"
-         v-model="password"
-         :type="ver ? 'text' : 'password'" 
-         :append-icon="ver ? 'mdi-eye' : 'mdi-eye-off'"
-         @click:append="ver = !ver"
-         ></v-text-field>
-        
+  <div class="login-card mt-15 pt-10 pb-3 mx-auto">
+  <v-flex xs12 sm8 md6 lg6 class="mx-auto">
 
-        </v-card-text>
-        
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="#90869c"
-            @click="login()"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
-  </div>
+    <form class="formulario">
+
+      <h2 class="text-left mt-10">
+        <v-icon large>mdi-account</v-icon>
+        Cadastro
+      </h2>
+      <br>
+
+      <v-text-field outlined filled required v-model="username" label="username"></v-text-field>
+
+      <v-text-field outlined filled required v-model="password" label="password" 
+        :type="ver ? 'text' : 'password'" 
+        :append-icon="ver ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="ver = !ver"
+      ></v-text-field>
+            
+      <v-btn class="mr-4 mt-5 grey" @click="cadastrar()">
+        Salvar
+      </v-btn>
+
+    </form>
+
+  </v-flex>
+</div>
 </template>
 
 <script>
@@ -46,7 +40,7 @@ export default {
     }
   },
   methods: {
-    async login(){
+    async cadastrar(){
       let username = this.username
       let password = this.password
 
@@ -67,8 +61,11 @@ export default {
 </script>
 
 <style>
-  #content{
-    margin-top:150px;
-    margin-left:200px;
+  .login-card{
+    margin: auto;
+    margin-top: 12%;
+    background-color: rgb(219, 206, 221);
+    border-radius: 5px;
+    padding: 50px;
   }
 </style>
