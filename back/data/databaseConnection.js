@@ -1,11 +1,11 @@
 const pgp = require('pg-promise')();
 
 const db = pgp({
-    user:'erika',
-    password: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    database: 'pdi_vuetify'
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.HOST,
+    port: process.env.PORT,
+    database: process.env.DB_NAME
 })
 
 module.exports = db;

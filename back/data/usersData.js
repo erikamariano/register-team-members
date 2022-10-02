@@ -21,8 +21,6 @@ module.exports = {
     },
 
     async postUser(id, username, hashedPwd){
-        console.log('chegou aqui = ', id, username, hashedPwd)
-
         let statement = `INSERT INTO users(id, username, password) VALUES ($1, $2, $3) returning *`
         try{
             return await database.one(statement, [id, username, hashedPwd]);

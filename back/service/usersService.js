@@ -6,7 +6,7 @@ module.exports = {
         try{
             return users.getUsers();
         } catch(e){
-            console.log('Error searching for users');
+            console.log('Error searching for users. ', e);
             throw Error
         }
         
@@ -45,7 +45,7 @@ module.exports = {
             return users.postUser(id, username, hashedPwd);
 
         }catch(e){
-            console.log('Error creating new user');
+            console.log('Error creating new user. ', e);
             throw Error
         }
     }

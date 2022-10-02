@@ -4,7 +4,6 @@ module.exports = {
     
     async getCollaborators(){
         try{
-            console.log('procurando no banco')
             let resp =  await database.query('SELECT * FROM collaborator');
             return JSON.stringify(resp)
         } catch(e){
@@ -13,10 +12,10 @@ module.exports = {
         
     },
 
-    async addCollaborator(nome, cargo, name, data){
-        let statement = `INSERT INTO collaborator(nome, cargo, avatar_file, img) VALUES ($1, $2, $3, $4) returning *`
+    async addCollaborator(nome, cargo, avatar){
+        let statement = `INSERT INTO collaborator(nome, cargo, avatar) VALUES ($1, $2, $3) returning *`
         try{
-            return await database.one(statement, [nome, cargo, name, data]);
+            return await database.one(statement, [nome, cargo, avatar]);
         } catch(e){
             console.log('There was an error adding the collab to the DB. = ', e);
             throw Error
@@ -33,12 +32,10 @@ module.exports = {
         }
     },
 
-    async editCollaborator(id, nome, cargo){
-        console.log('no edit data = ', id, nome, cargo)
-
-        let statement = `UPDATE collaborator SET nome = $1, cargo = $2 WHERE id = $3 returning *`
+    async editCollaborator(id, nome, cargo, avatar){
+        let statement = `UPDATE collaborator SET nome = $1, cargo = $2, avatar = $3 WHERE id = $4 returning *`
         try{
-            return await  database.one(statement, [nome, cargo, id]);
+            return await  database.one(statement, [nome, cargo, avatar, id]);
         }catch(e){
             console.log('There was an error editing the collaborator.', e);
             throw Error

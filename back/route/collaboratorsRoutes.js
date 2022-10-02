@@ -12,29 +12,16 @@ router.get('/collaborators', async (req,res) => {
     }
 });
 
-// router.post('/addcollaborators', async (req,res) => {
-//     try{
-//         let nome = req.body.nome;
-//         let cargo = req.body.cargo;
-//         let { name, data }  = req.files?.avatar;
-//         console.log(name, data);
-//         let response = await collaboratorsService.post(nome, cargo, name, data);
-//         res.status(200).send(response);
-//     }catch(err){
-//         res.status(404).send('Erro ao add um novo colaborador');
-//     }
-
-// });
-
 router.post('/addcollaborators', async (req,res) => {
     try{
         let nome = req.body.nome;
         let cargo = req.body.cargo;
         let avatar = req.body.avatar;
+
         let response = await collaboratorsService.post(nome, cargo, avatar);
         res.status(200).send(response);
     }catch(err){
-        res.status(404).send('Erro ao add um novo colaborador');
+        res.status(404).send('Erro ao add um novo colaborador = ', err);
     }
 
 });
@@ -56,7 +43,8 @@ router.put('/editcollaborator/:id', async (req, res) => {
         let id = req.params.id
         let nome = req.body.nome;
         let cargo = req.body.cargo;
-        let response = await collaboratorsService.put(id, nome, cargo);
+        let avatar = req.body.avatar
+        let response = await collaboratorsService.put(id, nome, cargo, avatar);
         res.status(200).send(response)
     }catch(err){
         console.log('Erro na rota de editar colaborador', err);

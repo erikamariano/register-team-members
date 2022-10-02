@@ -2,7 +2,6 @@ const collaborators = require('../data/collaboratorsData');
 
 module.exports = {
     async getAll(){
-        console.log('no get all')
         try{
             return collaborators.getCollaborators();
         } catch(e){
@@ -12,10 +11,9 @@ module.exports = {
         
     },
 
-    async post(nome, cargo, name, data){
+    async post(nome, cargo, avatar){
         try{
-            return collaborators.addCollaborator(nome, cargo, name, data);
-
+            return collaborators.addCollaborator(nome, cargo, avatar);
         }catch(e){
             console.log('Error creating new collaborator');
             throw Error
@@ -31,9 +29,9 @@ module.exports = {
         }
     },
 
-    async put(id, nome, cargo){
+    async put(id, nome, cargo, avatar){
         try{
-            return collaborators.editCollaborator(id, nome, cargo);
+            return collaborators.editCollaborator(id, nome, cargo, avatar);
         }catch(e){
             console.log('Error editing collaborator');
             throw Error

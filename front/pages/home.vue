@@ -11,8 +11,8 @@
         <v-flex xs12 sm6 md4 lg3 v-for="person in team" :key="person.nome">
           <v-card flat class="ma-3">
             <v-img
-              height="250"
-              src = "http://localhost:3000/avatar/avatar-6.jpeg"
+              height="235"
+              :src = person.avatar
             ></v-img>
 
             <v-card-title>{{ person.nome }}</v-card-title>

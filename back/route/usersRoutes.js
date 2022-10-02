@@ -4,7 +4,7 @@ const usersService = require('../service/usersService');
 
 router.get('/', (req,res) => {
     console.log('Health Check')
-    res.status(200).json({msg: 'Bem vindo a API'});
+    res.status(200).json({msg: 'Bem vindo à API'});
 })
 
 router.get('/users', async (req,res) => {

@@ -8,25 +8,11 @@
     <v-flex xs12 sm8 md6 lg6 class="mx-auto ">
     <form @submit.prevent="submit" ref="form">
 
-        <v-text-field outlined v-model="nome" label="Nome" required></v-text-field>
+        <v-text-field outlined v-model="nome" label="Nome" :rules="inputRules"></v-text-field>
 
-        <v-text-field outlined v-model="cargo" label="Cargo" required></v-text-field>
+        <v-text-field outlined v-model="cargo" label="Cargo" :rules="inputRules"></v-text-field>
 
-        <v-select :items="items" v-model="avatar" label="Outlined style" outlined></v-select>
-
-        <!-- <v-file-input
-            v-model="avatar"
-            accept="image/*"
-            label="Avatar"
-            prepend-icon="mdi-camera"
-        ></v-file-input> -->
-        
-        <!-- <div id="picture" class="pt-3 pb-3">
-          <label for="pic" class="grey--text mx-2">Avatar</label><br>
-          <input class="mt-2 mx-2" type="file" name="pic" ref="inputField" @change="onFileChange" />
-        </div> -->
-        
-
+        <v-select outlined :items="items" v-model="avatar" label="Avatar" :rules="inputRules"></v-select>      
 
       <br>
       <v-btn class="mr-4 mt-5 grey" @click="addColaborador()">
@@ -57,16 +43,14 @@ export default {
             'avatar 3',
             'avatar 4',
             'avatar 5',
-            'avatar 6',
+            'avatar 6'
+          ],
+          inputRules: [
+            v => !!v || 'Campo obrigatório'
           ]
       }
   },
   methods: {
-    onFileChange(e){
-      const selectedFile = e.target.files[0]; // accessando arquivo
-      this.avatar = selectedFile;
-    },
-
     showAlertConfirm(){
       const swal = new SweetAlert2({
         html: `<h3>Colaborador adicionado com sucesso</h3>`
@@ -74,82 +58,64 @@ export default {
     },
 
     createPathAvatar(avatar){
-      let path = `http://localhost:3000/avatar/`
+      let path = `/avatar/`
 
       switch(avatar){
         case 'avatar 1':
-          path =+ 'avatar-1.jpg';
+          path += 'avatar-1.jpg';
           break;
 
         case 'avatar 2':
-          path =+ 'avatar-2.jpg';
+          path += 'avatar-2.jpg';
           break;
 
         case 'avatar 3':
-          path =+ 'avatar-3.jpg';
+          path += 'avatar-3.jpg';
           break;
 
         case 'avatar 4':
-          path =+ 'avatar-4.jpg';
+          path += 'avatar-4.jpg';
           break;
 
         case 'avatar 5':
-          path =+ 'avatar-5.jpeg';
+          path += 'avatar-5.jpeg';
           break;
         
           case 'avatar 6':
-          path =+ 'avatar-6.jpeg';
+          path += 'avatar-6.jpeg';
           break;
         
         default:
-          path =+ 'avatar-1.jpg';
+          path += 'avatar-1.jpg';
+          break;
       }
+      return path;
     },
 
     async addColaborador(){
       let nome = this.nome
       let cargo = this.cargo
-      let avatar = this.avatar
-      console.log(nome)
-      console.log(cargo)
-      console.log(avatar)
+      let avatar = await this.createPathAvatar(this.avatar);
 
-      // const formData = new FormData();
-      // formData.append("nome", nome);
-      // formData.append("cargo", cargo);
-      // formData.append("avatar", avatar);
+      //console.log(nome, cargo, avatar)
 
-      // try{
-      //   await this.$axios.$post('/api/team/addcollaborators', formData);
-      //   this.showAlertConfirm();
-      //   this.$refs.form.reset();        
-      // }catch(err) {
-      //   console.log(err);
-      //   alert('Houve um erro ao salvar o colaborador. Tente novamente.', err);
-      // };
+      if(nome != null && cargo != null && avatar != null){
+        try{
+          await this.$axios.$post('/api/team/addcollaborators', {
+            "nome": nome,
+            "cargo": cargo,
+            "avatar": avatar
+          });
+          this.showAlertConfirm();
+          this.$refs.form.reset()
+        }catch(err) {
+          console.log(err);
+          alert('Houve um erro ao salvar o colaborador. Tente novamente.', err);
+        };
+      } else{
+        alert('Preencha os campso obrigatórios')
+      }
     }
-
-    // async addColaborador(){
-    //   let nome = this.nome
-    //   let cargo = this.cargo
-
-    //   const formData = new FormData();
-    //   formData.append("nome", nome);
-    //   formData.append("cargo", cargo);
-    //   formData.append("avatar", this.avatar);
-
-    //   try{
-    //     await this.$axios.$post('/api/team/addcollaborators', formData);
-
-    //     this.showAlertConfirm();
-    //     this.$refs.form.reset();
-        
-    //   } catch(err) {
-    //       console.log(err);
-
-    //       alert('Houve um erro ao salvar o colaborador. Tente novamente.', err);
-    //   };
-    // }
   },
   computed: {
     estaLogado(){
